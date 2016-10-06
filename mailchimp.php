@@ -12,6 +12,66 @@ use RocketTheme\Toolbox\Event\Event;
 class MailChimpPlugin extends Plugin
 {
     /**
+     * MailChimp's supported languages
+     *
+     * @var array
+     * @see http://kb.mailchimp.com/lists/managing-subscribers/view-and-edit-subscriber-languages
+     */
+    private static $supportedLanguages = [
+        'en',
+        'ar',
+        'af',
+        'be',
+        'bg',
+        'ca',
+        'zh',
+        'hr',
+        'cs',
+        'da',
+        'nl',
+        'et',
+        'fa',
+        'fi',
+        'fr',
+        'fr_CA',
+        'de',
+        'el',
+        'he',
+        'hi',
+        'hu',
+        'is',
+        'id',
+        'ga',
+        'it',
+        'ja',
+        'km',
+        'ko',
+        'lv',
+        'lt',
+        'mt',
+        'ms',
+        'mk',
+        'no',
+        'pl',
+        'pt',
+        'pt_PT',
+        'ro',
+        'ru',
+        'sr',
+        'sk',
+        'sl',
+        'es',
+        'es_ES',
+        'sw',
+        'sv',
+        'ta',
+        'th',
+        'tr',
+        'uk',
+        'vi',
+    ];
+
+    /**
      * @return array
      *
      * The getSubscribedEvents() gives the core a list of events
@@ -57,6 +117,37 @@ class MailChimpPlugin extends Plugin
     }
 
     /**
+     * @param Event $event
+     */
+    protected function handleSubscribe(Event $event)
+    {
+        $action = $event['action'];
+        $form = $event['form'];
+        $params = $event['params'];
+
+        $mailChimp = $this->getAPIWrapper();
+        $listIDs = $params['lists'];
+        $fieldMappings = (array_key_exists('field_mappings', $params)) ? $params['field_mappings'] : [];
+        $language = $this->getLanguage();
+
+        array_map(function ($listID) use ($mailChimp, $form, $fieldMappings, $language) {
+            $data = [
+                'email_address' => $form->value('email'),
+                'status' => 'subscribed',
+                'ip_signup' => $this->grav['uri']->ip(),
+                'language' => $language,
+            ];
+
+
+            if (!empty($fieldMappings)) {
+                $data['merge_fields'] = $this->getMergeFields($fieldMappings, $form);
+            }
+
+            $mailChimp->post("lists/{$listID}/members", $data);
+        }, $listIDs);
+    }
+
+    /**
      * @return MailChimp
      * @throws \Exception
      */
@@ -74,31 +165,15 @@ class MailChimpPlugin extends Plugin
     }
 
     /**
-     * @param Event $event
+     * @return mixed
      */
-    protected function handleSubscribe(Event $event)
+    protected function getLanguage()
     {
-        $action = $event['action'];
-        $form = $event['form'];
-        $params = $event['params'];
-
-        $mailChimp = $this->getAPIWrapper();
-        $listIDs = $params['lists'];
-        $fieldMappings = $params['field_mappings'];
-
-        array_map(function ($listID) use ($mailChimp, $form, $fieldMappings) {
-            $data = [
-                'email_address' => $form->value('email'),
-                'status' => 'subscribed',
-                'ip_signup' => $this->grav['uri']->ip(),
-            ];
-
-            if (!empty($fieldMappings)) {
-                $data['merge_fields'] = $this->getMergeFields($fieldMappings, $form);
-            }
-
-            $mailChimp->post("lists/{$listID}/members", $data);
-        }, $listIDs);
+        $languages = array_intersect($this->grav['language']->getBrowserLanguages(), self::$supportedLanguages);
+        if (!empty($languages)) {
+            return end($languages);
+        }
+        return $this->grav['config']->get('plugins.mailchimp.default_language');
     }
 
     /**
