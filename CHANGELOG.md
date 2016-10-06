@@ -1,0 +1,17 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/) 
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [Unreleased]
+### Fixed
+- Nothing yet
+
+## 0.0.1 - 2016-10-05
+### Added
+- Basic MailChimp API Support from @aaronhipple.
+- User IP submission from @aaronhipple.
+- Merge fields mapping from @aaronhipple.
+
+[Unreleased]: https://github.com/aaronhipple/grav-plugin-mailchimp/compare/0.0.1...HEAD

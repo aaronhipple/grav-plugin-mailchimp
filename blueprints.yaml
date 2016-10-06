@@ -1,0 +1,31 @@
+name: MailChimp
+version: 0.0.1
+description: Add MailChimp subscribe form action support
+icon: plug
+author:
+  name: Aaron Hipple
+  email: ahipple@gmail.com
+homepage: https://github.com/aaronhipple/grav-plugin-mailchimp
+demo: http://demo.yoursite.com
+keywords: grav, plugin, mailchimp
+bugs: https://github.com/aaronhipple/grav-plugin-mailchimp/issues
+docs: https://github.com/aaronhipple/grav-plugin-mailchimp/blob/develop/README.md
+license: MIT
+
+form:
+  validation: strict
+  fields:
+    enabled:
+      type: toggle
+      label: Plugin status
+      highlight: 1
+      default: 0
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
+    api_key:
+      type: password
+      label: API Key
+      help: Your MailChimp API Key
