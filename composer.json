@@ -1,5 +1,26 @@
 {
+    "name": "aaronhipple/grav-plugin-mailchimp",
+    "type": "grav-plugin",
+    "description": "Add MailChimp subscribe form action support",
+    "keywords": ["plugin","grav","mailchimp"],
+    "homepage": "https://www.aaronhipple.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aaron Hipple",
+            "email": "ahipple@gmail.com",
+            "homepage": "https://www.aaronhipple.com"
+        }
+    ],
     "require": {
-        "drewm/mailchimp-api": "^2.2"
+        "drewm/mailchimp-api": "^2.2",
+        "php": ">=5.4.0",
+        "composer/installers": "~1.0"
+    },
+    "extra": {
+        "installer-name": "mailchimp",
+        "installer-paths": {
+            "user/plugins/{$name}/": ["aaronhipple/grav-plugin-mailchimp"]
+        }
     }
 }

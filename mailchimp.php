@@ -18,58 +18,59 @@ class MailChimpPlugin extends Plugin
      * @see http://kb.mailchimp.com/lists/managing-subscribers/view-and-edit-subscriber-languages
      */
     private static $supportedLanguages = [
-        'en',
-        'ar',
-        'af',
-        'be',
-        'bg',
-        'ca',
-        'zh',
-        'hr',
-        'cs',
-        'da',
-        'nl',
-        'et',
-        'fa',
-        'fi',
-        'fr',
-        'fr_CA',
-        'de',
-        'el',
-        'he',
-        'hi',
-        'hu',
-        'is',
-        'id',
-        'ga',
-        'it',
-        'ja',
-        'km',
-        'ko',
-        'lv',
-        'lt',
-        'mt',
-        'ms',
-        'mk',
-        'no',
-        'pl',
-        'pt',
-        'pt_PT',
-        'ro',
-        'ru',
-        'sr',
-        'sk',
-        'sl',
-        'es',
-        'es_ES',
-        'sw',
-        'sv',
-        'ta',
-        'th',
-        'tr',
-        'uk',
-        'vi',
+        'en' => 'English',
+        'ar' => 'Arabic',
+        'af' => 'Afrikaans',
+        'be' => 'Belarusian',
+        'bg' => 'Bulgarian',
+        'ca' => 'Catalan',
+        'zh' => 'Chinese',
+        'hr' => 'Croatian',
+        'cs' => 'Czech',
+        'da' => 'Danish',
+        'nl' => 'Dutch',
+        'et' => 'Estonian',
+        'fa' => 'Farsi',
+        'fi' => 'Finnish',
+        'fr' => 'French (France)',
+        'fr_CA' => 'French (Canada)',
+        'de' => 'German',
+        'el' => 'Greek',
+        'he' => 'Hebrew',
+        'hi' => 'Hindi',
+        'hu' => 'Hungarian',
+        'is' => 'Icelandic',
+        'id' => 'Indonesian',
+        'ga' => 'Irish',
+        'it' => 'Italian',
+        'ja' => 'Japanese',
+        'km' => 'Khmer',
+        'ko' => 'Korean',
+        'lv' => 'Latvian',
+        'lt' => 'Lithuanian',
+        'mt' => 'Maltese',
+        'ms' => 'Malay',
+        'mk' => 'Macedonian',
+        'no' => 'Norwegian',
+        'pl' => 'Polish',
+        'pt' => 'Portuguese (Brazil)',
+        'pt_PT' => 'Portuguese (Portugal)',
+        'ro' => 'Romanian',
+        'ru' => 'Russian',
+        'sr' => 'Serbian',
+        'sk' => 'Slovak',
+        'sl' => 'Slovenian',
+        'es' => 'Spanish (Mexico)',
+        'es_ES' => 'Spanish (Spain)',
+        'sw' => 'Swahili',
+        'sv' => 'Swedish',
+        'ta' => 'Tamil',
+        'th' => 'Thai',
+        'tr' => 'Turkish',
+        'uk' => 'Ukrainian',
+        'vi' => 'Vietnamese',
     ];
+
 
     /**
      * @return array
@@ -114,6 +115,15 @@ class MailChimpPlugin extends Plugin
             case 'mailchimp':
                 $this->handleSubscribe($event);
         }
+    }
+
+    /**
+     * Retrieve supported languages
+     * @return array
+     */
+    public static function supportedLanguages()
+    {
+        return self::$supportedLanguages;
     }
 
     /**
@@ -169,7 +179,7 @@ class MailChimpPlugin extends Plugin
      */
     protected function getLanguage()
     {
-        $languages = array_intersect($this->grav['language']->getBrowserLanguages(), self::$supportedLanguages);
+        $languages = array_intersect($this->grav['language']->getBrowserLanguages(), array_keys(self::supportedLanguages()));
         if (!empty($languages)) {
             return end($languages);
         }
