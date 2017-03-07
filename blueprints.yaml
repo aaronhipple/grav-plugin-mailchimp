@@ -25,14 +25,41 @@ form:
         0: Disabled
       validate:
         type: bool
-    default_language:
-      type: select
-      size: long
-      label: Default Language
-      help: Subscriber language used if detection fails for any reason.
-      default: 'en'
-      data-options@: '\Grav\Plugin\MailChimpPlugin::supportedLanguages'
     api_key:
       type: password
       label: API Key
       help: Your MailChimp API Key
+    language_detection_mode:
+      type: toggle
+      label: Language Detection Mode
+      help: "'Browser' tries to detect the browser's language, while 'Active' uses Grav's active language."
+      default: browser
+      options:
+        browser: Browser
+        active: Active
+    default_language:
+      type: select
+      size: long
+      label: Default Language
+      help: Subscriber language used if detection fails or the detected language is not supported by MailChimp.
+      default: 'en'
+      data-options@: '\Grav\Plugin\MailChimpPlugin::supportedLanguages'
+    default_status:
+      type: toggle
+      label: Default Status
+      help: "'Pending' sends a confirmation email. 'Subscribed' does not."
+      default: subscribed
+      options:
+        subscribed: Subscribed
+        pending: Pending
+    delete_first:
+      type: toggle
+      label: Delete Subscriber First
+      help: Whether to delete any existing subscriber with the email address we're about to add to the list before adding it (useful to re-send confirmation email).
+      highlight: 1
+      default: 0
+      options:
+        1: PLUGIN_ADMIN.YES
+        0: PLUGIN_ADMIN.NO
+      validate:
+        type: bool

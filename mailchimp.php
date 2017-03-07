@@ -141,16 +141,20 @@ class MailChimpPlugin extends Plugin
         $language = $this->getLanguage();
 
         array_map(function ($listID) use ($mailChimp, $form, $fieldMappings, $language) {
+            $emailAddress = $form->value('email');
             $data = [
-                'email_address' => $form->value('email'),
-                'status' => 'subscribed',
+                'email_address' => $emailAddress,
+                'status' => $this->grav['config']->get('plugins.mailchimp.default_status'),
                 'ip_signup' => $this->grav['uri']->ip(),
                 'language' => $language,
             ];
 
-
             if (!empty($fieldMappings)) {
                 $data['merge_fields'] = $this->getMergeFields($fieldMappings, $form);
+            }
+
+            if ($this->grav['config']->get('plugins.mailchimp.delete_first')) {
+                $mailChimp->delete("lists/{$listID}/members/" . md5(strtolower($emailAddress)));
             }
 
             $mailChimp->post("lists/{$listID}/members", $data);
@@ -179,9 +183,18 @@ class MailChimpPlugin extends Plugin
      */
     protected function getLanguage()
     {
-        $languages = array_intersect($this->grav['language']->getBrowserLanguages(), array_keys(self::supportedLanguages()));
-        if (!empty($languages)) {
-            return end($languages);
+        $detected_languages = [];
+        switch ($this->grav['config']->get('plugins.mailchimp.language_detection_mode')) {
+            case 'browser':
+                $detected_languages = $this->grav['language']->getBrowserLanguages();
+                break;
+            case 'active':
+                $detected_languages = [$this->grav['language']->getActive()];
+                break;
+        }
+        $intersect_languages = array_intersect($detected_languages, array_keys(self::supportedLanguages()));
+        if (!empty($intersect_languages)) {
+            return end($intersect_languages);
         }
         return $this->grav['config']->get('plugins.mailchimp.default_language');
     }

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 - Changelog Formatting Improvements.
+- Added settings: language_detection_mode, default_status, and delete_first.
 
 ## [0.0.4] - 2016-10-06
 
