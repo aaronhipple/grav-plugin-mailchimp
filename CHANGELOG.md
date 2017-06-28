@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Better handling of site/project-level composer autoloading.
 - Report MailChimp API errors in Grav's log.
 - Added settings: language_detection_mode, default_status, and delete_first.
+- i18n in admin settings.
 
 ### Changed
 - Changelog Formatting Improvements.
