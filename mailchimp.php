@@ -154,6 +154,10 @@ class MailChimpPlugin extends Plugin
             }
 
             $mailChimp->post("lists/{$listID}/members", $data);
+
+            if (!$mailChimp->success()) {
+                $this->grav['log']->error(sprintf('MailChimp error: %s', $mailChimp->getLastError()));
+            }
         }, $listIDs);
     }
 
