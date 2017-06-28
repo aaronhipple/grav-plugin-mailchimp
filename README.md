@@ -6,6 +6,16 @@ The **MailChimp** Plugin is for [Grav CMS](http://github.com/getgrav/grav). It c
 
 Adds MailChimp subscribe form action support.
 
+## Installation
+
+This plugin is available via Packagist.org.
+
+```bash
+composer require aaronhipple/grav-plugin-mailchimp:^0.0.5
+```
+
+`gpm` installation is not yet available.
+
 ## Usage
 
 Configure the plugin with your MailChimp API key, either in `user/config/plugins/mailchimp.yaml` or using the admin plugin.
