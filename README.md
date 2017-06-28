@@ -31,6 +31,6 @@ form:
     process:
         - mailchimp:
             lists: [1234567, abcdefg]
-            mappings:
+            field_mappings:
                 mailchimpMergeField: my_custom_field
 ```
