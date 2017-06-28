@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 - Changelog Formatting Improvements.
+- Better handling of site/project-level composer autoloading.
 
 ## [0.0.4] - 2016-10-06
 
