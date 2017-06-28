@@ -164,11 +164,18 @@ class MailChimpPlugin extends Plugin
     protected function getAPIWrapper()
     {
         // Autoload classes
-        $autoload = __DIR__ . '/vendor/autoload.php';
-        if (!is_file($autoload)) {
-            throw new \Exception('MailChimp plugin failed to load. Composer dependencies not met.');
+        $autoload = [
+            __DIR__ . '/vendor/autoload.php',
+            VENDOR_DIR . '/autoload.php',
+        ];
+        if (!is_file($autoload[0])) {
+            if (count($autoload) === 0) {
+                throw new \Exception('MailChimp plugin failed to load. Composer dependencies not met.');
+            } else {
+                array_shift($autoload);
+            }
         }
-        require_once $autoload;
+        require_once $autoload[0];
         $apiKey = $this->grav['config']->get('plugins.mailchimp.api_key');
         $mailChimp = new MailChimp($apiKey);
         return $mailChimp;
