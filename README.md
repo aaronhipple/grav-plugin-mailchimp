@@ -38,8 +38,13 @@ form:
             label: My Custom Field
             placeholder: 'A Custom Field'
             type: text
+        -
+            name: news_letter
+            type: checkbox
+            label: 'Yes I would like to receive updated news and information'
     process:
         - mailchimp:
+            required_fields: [news_letter]
             lists: [1234567, abcdefg]
             field_mappings:
                 mailchimpMergeField: my_custom_field

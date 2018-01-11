@@ -131,6 +131,12 @@ class MailChimpPlugin extends Plugin
      */
     protected function handleSubscribe(Event $event)
     {
+
+        // Ignore this processing if one of the required fields are empty
+        if (!$this->shouldSubscribe($event)) {
+            return false;
+        }
+
         $action = $event['action'];
         $form = $event['form'];
         $params = $event['params'];
@@ -163,6 +169,34 @@ class MailChimpPlugin extends Plugin
                 $this->grav['log']->error(sprintf('MailChimp error: %s', $mailChimp->getLastError()));
             }
         }, $listIDs);
+    }
+
+    /**
+     * @param Event $event
+     */
+    protected function shouldSubscribe($event)
+    {
+
+        /*
+            If the triggers are not even defined then just return true
+            so we can just process the MC submission
+        */
+
+        $params = $event['params'];
+        $form = $event['form'];
+
+        if (isset($params['required_fields']) && !empty($params['required_fields'])) {
+            $isStr  = (is_string($params['required_fields'])) ? true : false;
+            $fields = $isStr ? [$params['required_fields']] : $params['required_fields'];
+            foreach ($fields as $field) {
+                $trigger_value = $form->value($field);
+                if (!$trigger_value) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
