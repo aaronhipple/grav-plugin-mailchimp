@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Default list ID can be specified in config.
+
 ## [0.0.5] - 2017-06-27
 
 ### Added
