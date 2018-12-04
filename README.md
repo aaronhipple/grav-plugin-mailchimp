@@ -42,6 +42,13 @@ form:
             name: news_letter
             type: checkbox
             label: 'Yes I would like to receive updated news and information'
+    buttons:
+        -
+            type: submit
+            value: Submit
+        -
+            type: reset
+            value: Reset
     process:
         - mailchimp:
             required_fields: [news_letter]
