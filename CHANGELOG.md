@@ -6,8 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2018-12-04
+
 ### Added
 - Default list ID can be specified in config.
+
+### Fixed
+- Resubscribes failing due to POST instead of PUT.
 
 ## [0.0.5] - 2017-06-27
 
