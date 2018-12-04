@@ -164,7 +164,8 @@ class MailChimpPlugin extends Plugin
                 $mailChimp->delete("lists/{$listID}/members/" . md5(strtolower($emailAddress)));
             }
 
-            $mailChimp->post("lists/{$listID}/members", $data);
+            $subscriberHash = md5(strtolower($emailAddress));
+            $mailChimp->put("lists/{$listID}/members/{$subscriberHash}", $data);
 
             if (!$mailChimp->success()) {
                 $this->grav['log']->error(sprintf('MailChimp error: %s', $mailChimp->getLastError()));
