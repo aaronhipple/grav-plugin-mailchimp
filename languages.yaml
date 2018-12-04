@@ -20,6 +20,9 @@ en:
       OPTIONS:
         SUBSCRIBED: Subscribed
         PENDING: Pending
+    DEFAULT_LIST_ID:
+      LABEL: Default List ID
+      HELP: "List to use when none specified in form definition."
     DELETE_FIRST:
       LABEL: Delete Subscriber First
       HELP: Whether to delete any existing subscriber with the email address we're about to add to the list before adding it (useful to re-send confirmation email).

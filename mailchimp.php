@@ -142,7 +142,8 @@ class MailChimpPlugin extends Plugin
         $params = $event['params'];
 
         $mailChimp = $this->getAPIWrapper();
-        $listIDs = $params['lists'];
+        $listIDs = (array_key_exists('lists', $params)) ?
+            $params['lists'] : [$this->grav['config']->get('plugins.mailchimp.default_list_id')];
         $fieldMappings = (array_key_exists('field_mappings', $params)) ? $params['field_mappings'] : [];
         $language = $this->getLanguage();
 

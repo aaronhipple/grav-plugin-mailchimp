@@ -52,6 +52,10 @@ form:
       options:
         subscribed: MAILCHIMP_SETTINGS.DEFAULT_STATUS.OPTIONS.SUBSCRIBED
         pending: MAILCHIMP_SETTINGS.DEFAULT_STATUS.OPTIONS.PENDING
+    default_list_id:
+      type: text
+      label: MAILCHIMP_SETTINGS.DEFAULT_LIST_ID.LABEL
+      help: MAILCHIMP_SETTINGS.DEFAULT_LIST_ID.HELP
     delete_first:
       type: toggle
       label: MAILCHIMP_SETTINGS.DELETE_FIRST.LABEL
