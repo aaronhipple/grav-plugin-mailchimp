@@ -1,0 +1,65 @@
+version: 2.1
+
+executors:
+  builder:
+    docker:
+      - image: circleci/php:7.1
+    working_directory: /tmp/mailchimp
+  releaser:
+    docker:
+      - image: circleci/golang:1.8
+    working_directory: /tmp/mailchimp
+
+jobs:
+
+  build_tags:
+    executor: builder
+    steps:
+      - checkout
+      - run: sudo composer self-update
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+      - run: |
+          [ -d /tmp/archives ] || mkdir -p /tmp/archives
+          VERSION="$(git tag -l --points-at HEAD | head -n 1)"
+          (cd ~ && tar --exclude-vcs --exclude='.circleci' -cvzf "/tmp/archives/grav-plugin-mailchimp-${VERSION}.tar.gz" ./mailchimp)
+          (cd ~ && zip "/tmp/archives/grav-plugin-mailchimp-${VERSION}.zip" ./mailchimp/{vendor/**/*,*.*,LICENSE})
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - archives
+
+  release_tags:
+    executor: releaser
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: |
+          go get github.com/tcnksm/ghr
+          VERSION=$(git tag -l --points-at HEAD | head -n 1)
+          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete -draft ${VERSION} /tmp/workspace/archives/
+
+workflows:
+  version: 2
+
+  build_and_release:
+    jobs:
+      - build_tags:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
+      - release_tags:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
+          requires:
+            - build_tags
