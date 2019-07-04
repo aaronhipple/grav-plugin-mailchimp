@@ -39,6 +39,7 @@ jobs:
   release_tags:
     executor: releaser
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/workspace
       - run: |
