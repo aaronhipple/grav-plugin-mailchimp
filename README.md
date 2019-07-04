@@ -8,6 +8,10 @@ Adds MailChimp subscribe form action support.
 
 ## Installation
 
+Downloads are available on the [Releases](../../releases) page. Once downloaded and extracted, copy the `mailchimp` directory to your Grav installation's `user/plugins` directory.
+
+### Install with Composer
+
 This plugin is available via Packagist.org.
 
 ```bash
