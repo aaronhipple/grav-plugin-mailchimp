@@ -15,6 +15,10 @@ Downloads are available on the [Releases](../../releases) page. Once downloaded 
 This plugin is available via Packagist.org.
 
 ```bash
+# install without dev dependencies in a production-type environment.
+composer require aaronhipple/grav-plugin-mailchimp --update-no-dev
+
+# install with dev dependencies in a development- or CI-type environment.
 composer require aaronhipple/grav-plugin-mailchimp
 ```
 
