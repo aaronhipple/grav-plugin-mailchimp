@@ -30,7 +30,7 @@ jobs:
           [ -d /tmp/archives ] || mkdir -p /tmp/archives
           VERSION="$(git tag -l --points-at HEAD | head -n 1)"
           (cd /tmp && tar --exclude-vcs --exclude='.circleci' -cvzf "/tmp/archives/grav-plugin-mailchimp-${VERSION}.tar.gz" ./mailchimp)
-          (cd /tmp && zip "/tmp/archives/grav-plugin-mailchimp-${VERSION}.zip" ./mailchimp/{vendor/**/*,*.*,LICENSE})
+          (cd /tmp && zip -r "/tmp/archives/grav-plugin-mailchimp-${VERSION}.zip" ./mailchimp/*)
       - persist_to_workspace:
           root: /tmp
           paths:
