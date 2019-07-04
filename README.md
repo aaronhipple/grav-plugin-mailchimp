@@ -11,7 +11,7 @@ Adds MailChimp subscribe form action support.
 This plugin is available via Packagist.org.
 
 ```bash
-composer require aaronhipple/grav-plugin-mailchimp:^0.0.5
+composer require aaronhipple/grav-plugin-mailchimp
 ```
 
 `gpm` installation is not yet available.
