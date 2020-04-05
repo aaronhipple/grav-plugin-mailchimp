@@ -1,5 +1,5 @@
 name: MailChimp
-version: 0.0.4
+version: 0.2.0
 description: Add MailChimp subscribe form action support
 icon: plug
 author:
@@ -42,7 +42,7 @@ form:
       size: long
       label: MAILCHIMP_SETTINGS.DEFAULT_LANGUAGE.LABEL
       help: MAILCHIMP_SETTINGS.DEFAULT_LANGUAGE.HELP
-      default: 'en'
+      default: "en"
       data-options@: '\Grav\Plugin\MailChimpPlugin::supportedLanguages'
     default_status:
       type: toggle

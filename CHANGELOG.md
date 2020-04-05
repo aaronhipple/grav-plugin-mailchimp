@@ -1,3 +1,11 @@
+# v0.2.0
+
+## 04/05/2020
+
+1. [](#improved)
+   - Reorganized the codebase substantially for better testing.
+   - Updated changelog format in preparation for publishing to GPM.
+
 # v0.1.0
 
 ## 12/04/2018
