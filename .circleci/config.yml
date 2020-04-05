@@ -3,10 +3,10 @@ version: 2.1
 executors:
   tester:
     docker:
-      - image: circleci/php:7.3
+      - image: circleci/php:7.2
   builder:
     docker:
-      - image: circleci/php:7.3
+      - image: circleci/php:7.2
     working_directory: /tmp/mailchimp
   releaser:
     docker:
@@ -18,10 +18,9 @@ jobs:
     executor: tester
     steps:
       - checkout
-      - run: sudo composer self-update
-      - run: sudo apt-get update
-      - run: sudo apt-get install -y libpng-dev
+      - run: sudo apt install -y libpng-dev
       - run: sudo docker-php-ext-install gd
+      - run: sudo composer self-update
       - restore_cache:
           keys:
             - composer-dev-{{ .Branch }}-{{ checksum "composer.lock" }}
@@ -47,10 +46,11 @@ jobs:
       - run: sudo composer self-update
       - restore_cache:
           keys:
-            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-{{ .Branch }}-{{ checksum "composer.lock" }}
+            - composer-{{ .Branch }}-
       - run: composer install -n --prefer-dist
       - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
+          key: composer-{{ .Branch }}-{{ checksum "composer.lock" }}
           paths:
             - vendor
       - run: |
