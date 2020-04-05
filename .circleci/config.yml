@@ -18,6 +18,7 @@ jobs:
     executor: tester
     steps:
       - checkout
+      - run: sudo apt update -y
       - run: sudo apt install -y libpng-dev
       - run: sudo docker-php-ext-install gd
       - run: sudo composer self-update
