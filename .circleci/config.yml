@@ -1,9 +1,12 @@
 version: 2.1
 
 executors:
+  tester:
+    docker:
+      - image: circleci/php:7.2
   builder:
     docker:
-      - image: circleci/php:7.1
+      - image: circleci/php:7.2
     working_directory: /tmp/mailchimp
   releaser:
     docker:
@@ -11,6 +14,31 @@ executors:
     working_directory: /tmp/mailchimp
 
 jobs:
+  test:
+    executor: tester
+    steps:
+      - checkout
+      - run: sudo apt update -y
+      - run: sudo apt install -y libpng-dev
+      - run: sudo docker-php-ext-install gd
+      - run: sudo composer self-update
+      - restore_cache:
+          keys:
+            - composer-dev-{{ .Branch }}-{{ checksum "composer.lock" }}
+      - run: composer install -n
+      - save_cache:
+          key: composer-dev-{{ .Branch }}-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+      - run: composer lint
+      - run:
+          command: |
+            mkdir -p build/{test-results,coverage}
+      - run: vendor/bin/phpunit --coverage-html build/coverage --log-junit build/test-results/junit.xml
+      - store_test_results:
+          path: build/test-results
+      - store_artifacts:
+          path: build/coverage
 
   build_tags:
     executor: builder
@@ -19,11 +47,11 @@ jobs:
       - run: sudo composer self-update
       - restore_cache:
           keys:
-            - composer-v1-{{ checksum "composer.lock" }}
-            - composer-v1-
+            - composer-{{ .Branch }}-{{ checksum "composer.lock" }}
+            - composer-{{ .Branch }}-
       - run: composer install -n --prefer-dist
       - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
+          key: composer-{{ .Branch }}-{{ checksum "composer.lock" }}
           paths:
             - vendor
       - run: |
@@ -50,16 +78,22 @@ jobs:
 workflows:
   version: 2
 
+  tests:
+    jobs:
+      - test
+
   build_and_release:
     jobs:
       - build_tags:
           filters:
+            branches:
+              only: master
             tags:
               only: /^v\d+\.\d+\.\d+$/
       - release_tags:
           filters:
             branches:
-              ignore: /.*/
+              only: master
             tags:
               only: /^v\d+\.\d+\.\d+$/
           requires:

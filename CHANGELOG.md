@@ -1,61 +1,62 @@
-# Change Log
-All notable changes to this project will be documented in this file.
+# v0.2.0
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/) 
-and this project adheres to [Semantic Versioning](http://semver.org/).
+## 04/05/2020
 
-## [Unreleased]
+1. [](#improved)
+   - Reorganized the codebase substantially for better testing.
+   - Updated changelog format in preparation for publishing to GPM.
 
-## [0.1.0] - 2018-12-04
+# v0.1.0
 
-### Added
-- Default list ID can be specified in config.
+## 12/04/2018
 
-### Fixed
-- Resubscribes failing due to POST instead of PUT.
+1. [](#new)
+   - Default list ID can be specified in config.
+1. [](#bugfix)
+   - Resubscribes failing due to POST instead of PUT.
 
-## [0.0.5] - 2017-06-27
+# v0.0.5
 
-### Added
-- Better handling of site/project-level composer autoloading.
-- Report MailChimp API errors in Grav's log.
-- Added settings: language_detection_mode, default_status, and delete_first.
-- i18n in admin settings.
+## 06/27/2017
 
-### Changed
-- Changelog Formatting Improvements.
+1. [](#new)
+   - Better handling of site/project-level composer autoloading.
+   - Report MailChimp API errors in Grav's log.
+   - Added settings: language_detection_mode, default_status, and delete_first.
+   - i18n in admin settings.
+1. [](#improved)
+   - Changelog Formatting Improvements.
 
-## [0.0.4] - 2016-10-06
+# v0.0.4
 
-### Added
-- Default language chooser in admin plugin
+## 10/06/2016
 
-### Changed
-- Fill out composer.json to permit composer-based installation
+1. [](#new)
+   - Default language chooser in admin plugin
+1. [](#improved)
+   - Fill out composer.json to permit composer-based installation
 
-## [0.0.3] - 2016-10-06
+# v0.0.3
 
-### Changed
-- Update release tagging convention in changelog (0.0.x -> v0.0.x)
+## 10/06/2016
 
-## [0.0.2] - 2016-10-05
+1. [](#improved)
+   - Update release tagging convention in changelog (0.0.x -> v0.0.x)
 
-### Added
-- Language detection support.
+# v0.0.2
 
-### Fixed
-- General bug fixes — it works.
+## 10/05/2016
 
-## 0.0.1 - 2016-10-05
+1. [](#new)
+   - Language detection support.
+1. [](#bugfix)
+   - General bug fixes — it works.
 
-### Added
-- Basic MailChimp API Support.
-- User IP submission.
-- Merge fields mapping.
+# v0.0.1
 
-[Unreleased]: https://github.com/aaronhipple/grav-plugin-mailchimp/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/aaronhipple/grav-plugin-mailchimp/compare/v0.0.5...v0.1.0
-[0.0.5]: https://github.com/aaronhipple/grav-plugin-mailchimp/compare/v0.0.4...v0.0.5
-[0.0.4]: https://github.com/aaronhipple/grav-plugin-mailchimp/compare/v0.0.3...v0.0.4
-[0.0.3]: https://github.com/aaronhipple/grav-plugin-mailchimp/compare/v0.0.2...v0.0.3
-[0.0.2]: https://github.com/aaronhipple/grav-plugin-mailchimp/compare/v0.0.1...v0.0.2
+## 10/05/2016
+
+1. [](#new)
+   - Basic MailChimp API Support.
+   - User IP submission.
+   - Merge fields mapping.

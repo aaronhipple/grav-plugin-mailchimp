@@ -1,1 +1,4 @@
 /vendor
+/coverage
+/user
+*.cache
