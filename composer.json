@@ -28,7 +28,8 @@
     "rockettheme/toolbox": "^1.5",
     "getgrav/grav": "^1.6",
     "phpspec/prophecy-phpunit": "master@dev",
-    "monolog/monolog": "~1.0"
+    "monolog/monolog": "~1.0",
+    "squizlabs/php_codesniffer": "3.*"
   },
   "autoload": {
     "psr-4": {
@@ -39,6 +40,6 @@
     "lint": "phpcs",
     "lint:fix": "phpcbf",
     "test": "phpunit",
-    "coverage:html": "phpunit --coverage-html=coverage"
+    "coverage": "phpunit --coverage-html=coverage"
   }
 }

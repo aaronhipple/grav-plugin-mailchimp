@@ -7,6 +7,7 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Exception;
 
 /**
  * @covers \AaronHipple\Grav\Plugin\MailChimp\ErrorLoggingMailChimp
