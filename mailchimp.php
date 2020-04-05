@@ -1,9 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 namespace Grav\Plugin;
 
-use DrewM\MailChimp\MailChimp;
+$vendoredAutoloader = __DIR__ . '/vendor/autoload.php';
+if (is_file($vendoredAutoloader)) {
+    include_once $vendoredAutoloader;
+}
+
 use Grav\Common\Plugin;
-use RocketTheme\Toolbox\Event\Event;
+use DrewM\MailChimp\MailChimp;
+use AaronHipple\Grav\Plugin\MailChimp\FormEventHandler;
 
 /**
  * Class MailChimpPlugin
@@ -100,9 +105,11 @@ class MailChimpPlugin extends Plugin
         }
 
         // Enable the main event we are interested in
-        $this->enable([
-            'onFormProcessed' => ['onFormProcessed', 0]
-        ]);
+        $this->enable(
+            [
+                'onFormProcessed' => ['onFormProcessed', 0]
+            ]
+        );
     }
 
     /**
@@ -112,8 +119,20 @@ class MailChimpPlugin extends Plugin
     public function onFormProcessed(Event $event)
     {
         switch ($event['action']) {
-            case 'mailchimp':
-                $this->handleSubscribe($event);
+        case 'mailchimp':
+            (new FormEventHandler())
+                ->setWrapper(
+                    new ErrorLoggingMailChimp(
+                        new MailChimp($this->grav['config']->get('plugins.mailchimp.api_key')),
+                        $this->grav['log']
+                    )
+                )
+                ->setDefaultListId($this->grav['config']->get('plugins.mailchimp.default_list_id'))
+                ->setDefaultStatus($this->grav['config']->get('plugins.mailchimp.default_status'))
+                ->setDeleteFirst($this->grav['config']->get('plugins.mailchimp.delete_first'))
+                ->setIp($this->grav['uri']->ip())
+                ->setLanguage($this->getLanguage())
+                ->onEvent($event);
         }
     }
 
@@ -127,136 +146,23 @@ class MailChimpPlugin extends Plugin
     }
 
     /**
-     * @param Event $event
-     */
-    protected function handleSubscribe(Event $event)
-    {
-
-        // Ignore this processing if one of the required fields are empty
-        if (!$this->shouldSubscribe($event)) {
-            return false;
-        }
-
-        $action = $event['action'];
-        $form = $event['form'];
-        $params = $event['params'];
-
-        $mailChimp = $this->getAPIWrapper();
-        $listIDs = (array_key_exists('lists', $params)) ?
-            $params['lists'] : [$this->grav['config']->get('plugins.mailchimp.default_list_id')];
-        $fieldMappings = (array_key_exists('field_mappings', $params)) ? $params['field_mappings'] : [];
-        $language = $this->getLanguage();
-
-        array_map(function ($listID) use ($mailChimp, $form, $fieldMappings, $language) {
-            $emailAddress = $form->value('email');
-            $data = [
-                'email_address' => $emailAddress,
-                'status' => $this->grav['config']->get('plugins.mailchimp.default_status'),
-                'ip_signup' => $this->grav['uri']->ip(),
-                'language' => $language,
-            ];
-
-            if (!empty($fieldMappings)) {
-                $data['merge_fields'] = $this->getMergeFields($fieldMappings, $form);
-            }
-
-            if ($this->grav['config']->get('plugins.mailchimp.delete_first')) {
-                $mailChimp->delete("lists/{$listID}/members/" . md5(strtolower($emailAddress)));
-            }
-
-            $subscriberHash = md5(strtolower($emailAddress));
-            $mailChimp->put("lists/{$listID}/members/{$subscriberHash}", $data);
-
-            if (!$mailChimp->success()) {
-                $this->grav['log']->error(sprintf('MailChimp error: %s', $mailChimp->getLastError()));
-            }
-        }, $listIDs);
-    }
-
-    /**
-     * @param Event $event
-     */
-    protected function shouldSubscribe($event)
-    {
-
-        /*
-            If the triggers are not even defined then just return true
-            so we can just process the MC submission
-        */
-
-        $params = $event['params'];
-        $form = $event['form'];
-
-        if (isset($params['required_fields']) && !empty($params['required_fields'])) {
-            $isStr  = (is_string($params['required_fields'])) ? true : false;
-            $fields = $isStr ? [$params['required_fields']] : $params['required_fields'];
-            foreach ($fields as $field) {
-                $trigger_value = $form->value($field);
-                if (!$trigger_value) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @return MailChimp
-     * @throws \Exception
-     */
-    protected function getAPIWrapper()
-    {
-        // Autoload classes
-        $autoload = [
-            __DIR__ . '/vendor/autoload.php',
-            VENDOR_DIR . '/autoload.php',
-        ];
-        if (!is_file($autoload[0])) {
-            if (count($autoload) === 0) {
-                throw new \Exception('MailChimp plugin failed to load. Composer dependencies not met.');
-            } else {
-                array_shift($autoload);
-            }
-        }
-        require_once $autoload[0];
-        $apiKey = $this->grav['config']->get('plugins.mailchimp.api_key');
-        $mailChimp = new MailChimp($apiKey);
-        return $mailChimp;
-    }
-
-    /**
      * @return mixed
      */
     protected function getLanguage()
     {
-        $detected_languages = [];
+        $detectedLanguages = [];
         switch ($this->grav['config']->get('plugins.mailchimp.language_detection_mode')) {
-            case 'browser':
-                $detected_languages = $this->grav['language']->getBrowserLanguages();
-                break;
-            case 'active':
-                $detected_languages = [$this->grav['language']->getActive()];
-                break;
+        case 'browser':
+            $detectedLanguages = $this->grav['language']->getBrowserLanguages();
+            break;
+        case 'active':
+            $detectedLanguages = [$this->grav['language']->getActive()];
+            break;
         }
-        $intersect_languages = array_intersect($detected_languages, array_keys(self::supportedLanguages()));
-        if (!empty($intersect_languages)) {
-            return end($intersect_languages);
+        $intersectLanguages = array_intersect($detectedLanguages, array_keys(self::supportedLanguages()));
+        if (!empty($intersectLanguages)) {
+            return end($intersectLanguages);
         }
         return $this->grav['config']->get('plugins.mailchimp.default_language');
-    }
-
-    /**
-     * @param array $fieldMappings
-     * @param Form $form
-     * @return array
-     */
-    protected function getMergeFields(array $fieldMappings, Form $form)
-    {
-        $mergeFields = [];
-        foreach ($fieldMappings as $key => $value) {
-            $mergeFields[$key] = $form->value($value);
-        }
-        return $mergeFields;
     }
 }
