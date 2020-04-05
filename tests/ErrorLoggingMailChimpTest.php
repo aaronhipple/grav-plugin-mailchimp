@@ -6,7 +6,6 @@ use DrewM\MailChimp\MailChimp;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Exception;
 
 /**
@@ -14,35 +13,33 @@ use Exception;
  */
 final class ErrorLoggingMailChimpTest extends TestCase
 {
-    use ProphecyTrait;
-
     protected function setUp(): void
     {
         $this->mailchimp = $this->prophesize(MailChimp::class);
         $this->mailchimp->put(
             Argument::type('string'),
             Argument::type('array'),
-            Argument::type('int'),
+            Argument::type('int')
         )->willReturn(null);
         $this->mailchimp->delete(
             Argument::type('string'),
             Argument::type('array'),
-            Argument::type('int'),
+            Argument::type('int')
         )->willReturn(null);
         $this->mailchimp->post(
             Argument::type('string'),
             Argument::type('array'),
-            Argument::type('int'),
+            Argument::type('int')
         )->willReturn(null);
         $this->mailchimp->get(
             Argument::type('string'),
             Argument::type('array'),
-            Argument::type('int'),
+            Argument::type('int')
         )->willReturn(null);
         $this->mailchimp->patch(
             Argument::type('string'),
             Argument::type('array'),
-            Argument::type('int'),
+            Argument::type('int')
         )->willReturn(null);
         $this->mailchimp->success()->willReturn(true);
         $this->mailchimp->getLastError()->willReturn(null);

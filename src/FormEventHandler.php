@@ -57,7 +57,7 @@ final class FormEventHandler
             $this->defaultListId,
             $this->defaultStatus,
             $this->ip,
-            $this->deleteFirst ?? false,
+            $this->deleteFirst ?? false
         ) {
             public function __construct(
                 MailChimp $mailchimp,

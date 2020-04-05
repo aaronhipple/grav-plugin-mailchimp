@@ -6,7 +6,6 @@ use DrewM\MailChimp\MailChimp;
 use Grav\Framework\Form\Interfaces\FormInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 use RocketTheme\Toolbox\Event\Event;
 
 /**
@@ -14,8 +13,6 @@ use RocketTheme\Toolbox\Event\Event;
  */
 final class FormEventHandlerTest extends TestCase
 {
-    use ProphecyTrait;
-   
     protected $listId = 'I BE DEFAULT';
     protected $email = 'test@test.test';
     protected $subscriberId = 'dd46a756faad4727fb679320751f6dea'; // MailChimp::subscriberHash($email)
