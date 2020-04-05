@@ -50,7 +50,13 @@ class ErrorLoggingMailChimp extends MailChimp
     private function logIfError()
     {
         if (!$this->delegate->success()) {
-            $this->log->error(sprintf('MailChimp error: %s', $this->delegate->getLastError()));
+            $this->log->error(
+                sprintf(
+                    "MailChimp error: %s\n%s",
+                    $this->delegate->getLastError(),
+                    $this->delegate->getLastResponse()['body']
+                )
+            );
         }
     }
 }

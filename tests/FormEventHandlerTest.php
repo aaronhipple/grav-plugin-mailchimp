@@ -3,7 +3,7 @@ namespace AaronHipple\Grav\Plugin\MailChimp\Test;
 
 use AaronHipple\Grav\Plugin\MailChimp\FormEventHandler;
 use DrewM\MailChimp\MailChimp;
-use Grav\Framework\Form\Interfaces\FormInterface;
+use Grav\Plugin\Form\Form;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use RocketTheme\Toolbox\Event\Event;
@@ -29,10 +29,10 @@ final class FormEventHandlerTest extends TestCase
             Argument::type('array')
         );
 
-        $this->form = $this->prophesize();
-        $this->form->willImplement('Grav\Framework\Form\Interfaces\FormInterface');
-        $this->form->getValue('email')->willReturn($this->email);
-        $this->form->getValue(Argument::type('string'))->willReturn(null);
+        $this->form = $this->prophesize(Form::class);
+        $this->form->willExtend(Form::class);
+        $this->form->value('email')->willReturn($this->email);
+        $this->form->value(Argument::type('string'))->willReturn(null);
 
         $this->event = $this->prophesize(Event::class);
         $this->event->willImplement('ArrayAccess');
@@ -104,7 +104,7 @@ final class FormEventHandlerTest extends TestCase
 
     public function testSendsMappedFields()
     {
-        $this->form->getValue('field_1')->willReturn('value_1');
+        $this->form->value('field_1')->willReturn('value_1');
 
         $this->event->offsetGet('params')->willReturn(
             [
@@ -178,7 +178,7 @@ final class FormEventHandlerTest extends TestCase
 
     public function testDoesNotSendIfSomeRequiredFieldsAreAbsent()
     {
-        $this->form->getValue('foo')->willReturn('foo');
+        $this->form->value('foo')->willReturn('foo');
 
         $this->event->offsetGet('params')->willReturn(
             [
@@ -196,8 +196,8 @@ final class FormEventHandlerTest extends TestCase
 
     public function testDoesSendIfAllRequiredFieldsArePresent()
     {
-        $this->form->getValue('foo')->willReturn('foo');
-        $this->form->getValue('bar')->willReturn('bar');
+        $this->form->value('foo')->willReturn('foo');
+        $this->form->value('bar')->willReturn('bar');
 
         $this->event->offsetGet('params')->willReturn(
             [

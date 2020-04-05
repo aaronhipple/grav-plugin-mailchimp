@@ -1,14 +1,17 @@
 <?php declare(strict_types=1);
 namespace Grav\Plugin;
 
+use RocketTheme\Toolbox\Event\Event;
+
 $vendoredAutoloader = __DIR__ . '/vendor/autoload.php';
 if (is_file($vendoredAutoloader)) {
     include_once $vendoredAutoloader;
 }
 
-use Grav\Common\Plugin;
-use DrewM\MailChimp\MailChimp;
+use AaronHipple\Grav\Plugin\MailChimp\ErrorLoggingMailChimp;
 use AaronHipple\Grav\Plugin\MailChimp\FormEventHandler;
+use DrewM\MailChimp\MailChimp;
+use Grav\Common\Plugin;
 
 /**
  * Class MailChimpPlugin
@@ -114,14 +117,14 @@ class MailChimpPlugin extends Plugin
 
     /**
      * Add the MailChimp form handler
-     * @param Event $event
+     * @param RocketTheme\Toolbox\Event\Event $event
      */
     public function onFormProcessed(Event $event)
     {
         switch ($event['action']) {
         case 'mailchimp':
             (new FormEventHandler())
-                ->setWrapper(
+                ->setMailChimp(
                     new ErrorLoggingMailChimp(
                         new MailChimp($this->grav['config']->get('plugins.mailchimp.api_key')),
                         $this->grav['log']

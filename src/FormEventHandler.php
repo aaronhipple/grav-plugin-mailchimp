@@ -2,7 +2,7 @@
 namespace AaronHipple\Grav\Plugin\MailChimp;
 
 use DrewM\MailChimp\MailChimp;
-use Grav\Framework\Form\Interfaces\FormInterface;
+use Grav\Plugin\Form\Form;
 use RocketTheme\Toolbox\Event\Event;
 
 /**
@@ -90,7 +90,7 @@ final class FormEventHandler
                 $fieldMappings = array_key_exists('field_mappings', $event['params'])
                                ? $event['params']['field_mappings']
                                : [];
-                $email = $event['form']->getValue('email');
+                $email = $event['form']->value('email');
                 $subscriberId = MailChimp::subscriberHash($email);
                 $mergeFields = empty($fieldMappings)
                              ? null
@@ -137,7 +137,7 @@ final class FormEventHandler
                     $isStr  = is_string($params['required_fields']);
                     $fields = $isStr ? [$params['required_fields']] : $params['required_fields'];
                     foreach ($fields as $field) {
-                        $trigger_value = $form->getValue($field);
+                        $trigger_value = $form->value($field);
                         if (!$trigger_value) {
                             return false;
                         }
@@ -149,14 +149,14 @@ final class FormEventHandler
 
             /**
              * @param  array         $fieldMappings
-             * @param  FormInterface $form
+             * @param  Form $form
              * @return array
              */
-            protected function getMergeFields(array $fieldMappings, FormInterface $form)
+            protected function getMergeFields(array $fieldMappings, Form $form)
             {
                 $mergeFields = [];
                 foreach ($fieldMappings as $key => $value) {
-                    $mergeFields[$key] = $form->getValue($value);
+                    $mergeFields[$key] = $form->value($value);
                 }
                 return $mergeFields;
             }

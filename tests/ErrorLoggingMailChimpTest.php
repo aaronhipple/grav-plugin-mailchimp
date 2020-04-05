@@ -6,7 +6,6 @@ use DrewM\MailChimp\MailChimp;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Exception;
 
 /**
  * @covers \AaronHipple\Grav\Plugin\MailChimp\ErrorLoggingMailChimp
@@ -79,7 +78,13 @@ final class ErrorLoggingMailChimpTest extends TestCase
     public function testLogsWhenAnErrorOccurs(string $method)
     {
         $this->mailchimp->success()->willReturn(false);
-        $this->mailchimp->getLastError()->willReturn(new Exception('Oh no!'));
+        $this->mailchimp->getLastError()->willReturn("Oh no!");
+        $this->mailchimp->getLastResponse()->willReturn(
+            [
+                'headers' => [],
+                'body' => '',
+            ]
+        );
 
         $this->lmc()->$method("", []);
 
