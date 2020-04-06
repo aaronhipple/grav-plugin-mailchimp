@@ -86,14 +86,12 @@ workflows:
     jobs:
       - build_tags:
           filters:
-            branches:
-              only: master
             tags:
               only: /^v\d+\.\d+\.\d+$/
       - release_tags:
           filters:
             branches:
-              only: master
+              ignore: /.*/
             tags:
               only: /^v\d+\.\d+\.\d+$/
           requires:
