@@ -10,7 +10,7 @@ executors:
     working_directory: /tmp/mailchimp
   releaser:
     docker:
-      - image: circleci/golang:1.8
+      - image: circleci/golang:1.12
     working_directory: /tmp/mailchimp
 
 jobs:
