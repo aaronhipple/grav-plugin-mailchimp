@@ -49,7 +49,7 @@ jobs:
           keys:
             - composer-{{ .Branch }}-{{ checksum "composer.lock" }}
             - composer-{{ .Branch }}-
-      - run: composer install -n --prefer-dist
+      - run: composer install -n --no-dev --prefer-dist
       - save_cache:
           key: composer-{{ .Branch }}-{{ checksum "composer.lock" }}
           paths:
