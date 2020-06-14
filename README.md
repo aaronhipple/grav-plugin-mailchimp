@@ -10,6 +10,14 @@ Adds MailChimp subscribe form action support.
 
 Downloads are available on the [Releases](../../releases) page. Once downloaded and extracted, copy the `mailchimp` directory to your Grav installation's `user/plugins` directory.
 
+### Install from GPM
+
+Installation is available through the GPM. Install it from your site's admin panel or from the terminal:
+
+```bash
+$ bin/gpm install mailchimp
+```
+
 ### Install with Composer
 
 This plugin is available via Packagist.org.
@@ -21,8 +29,6 @@ composer require aaronhipple/grav-plugin-mailchimp --update-no-dev
 # install with dev dependencies in a development- or CI-type environment.
 composer require aaronhipple/grav-plugin-mailchimp
 ```
-
-`gpm` installation is not yet available.
 
 ## Usage
 
