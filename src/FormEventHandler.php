@@ -23,9 +23,9 @@ final class FormEventHandler
         $this->language = $language;
         return $this;
     }
-    public function setDefaultListId(string $defaultListId)
+    public function setDefaultListIds(array $defaultListIds)
     {
-        $this->defaultListId = $defaultListId;
+        $this->defaultListIds = $defaultListIds;
         return $this;
     }
     public function setDefaultStatus(string $defaultStatus)
@@ -54,7 +54,7 @@ final class FormEventHandler
         return new class(
             $this->mailchimp,
             $this->language,
-            $this->defaultListId,
+            $this->defaultListIds ?? [],
             $this->defaultStatus,
             $this->ip,
             $this->deleteFirst ?? false
@@ -62,14 +62,14 @@ final class FormEventHandler
             public function __construct(
                 MailChimp $mailchimp,
                 string $language,
-                string $defaultListId,
+                array $defaultListIds,
                 string $defaultStatus,
                 string $ip,
                 bool $deleteFirst
             ) {
                 $this->mailchimp = $mailchimp;
                 $this->language = $language;
-                $this->defaultListId = $defaultListId;
+                $this->defaultListIds = $defaultListIds;
                 $this->defaultStatus = $defaultStatus;
                 $this->ip = $ip;
                 $this->deleteFirst = $deleteFirst;
@@ -86,7 +86,8 @@ final class FormEventHandler
 
                 $listIds = array_key_exists('lists', $event['params'])
                          ? $event['params']['lists']
-                         : [$this->defaultListId];
+                         : $this->defaultListIds;
+
                 $fieldMappings = array_key_exists('field_mappings', $event['params'])
                                ? $event['params']['field_mappings']
                                : [];

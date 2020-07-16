@@ -122,20 +122,26 @@ class MailChimpPlugin extends Plugin
     public function onFormProcessed(Event $event)
     {
         switch ($event['action']) {
-        case 'mailchimp':
-            (new FormEventHandler())
-                ->setMailChimp(
-                    new ErrorLoggingMailChimp(
-                        new MailChimp($this->grav['config']->get('plugins.mailchimp.api_key')),
-                        $this->grav['log']
-                    )
-                )
-                ->setDefaultListId($this->grav['config']->get('plugins.mailchimp.default_list_id'))
-                ->setDefaultStatus($this->grav['config']->get('plugins.mailchimp.default_status'))
-                ->setDeleteFirst($this->grav['config']->get('plugins.mailchimp.delete_first'))
-                ->setIp($this->grav['uri']->ip())
-                ->setLanguage($this->getLanguage())
-                ->onEvent($event);
+            case 'mailchimp':
+                $mailchimp = new ErrorLoggingMailChimp(
+                    new MailChimp($this->grav['config']->get('plugins.mailchimp.api_key')),
+                    $this->grav['log']
+                );
+
+                $handler = (new FormEventHandler())
+                    ->setMailChimp($mailchimp)
+                    ->setDefaultStatus($this->grav['config']->get('plugins.mailchimp.default_status'))
+                    ->setDeleteFirst($this->grav['config']->get('plugins.mailchimp.delete_first'))
+                    ->setIp($this->grav['uri']->ip())
+                    ->setLanguage($this->getLanguage());
+
+                $defaultListId = $this->grav['config']->get('plugins.mailchimp.default_list_id');
+
+                if (!is_null($defaultListId)) {
+                    $handler->setDefaultListIds([$defaultListId]);
+                }
+
+                $handler->onEvent($event);
         }
     }
 

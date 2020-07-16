@@ -1,3 +1,9 @@
+# unreleased
+
+## 07/17/2020
+1. [](#bugfix)
+   - Fix error when no default list ID is configured.
+
 # v0.2.0
 
 ## 04/05/2020
