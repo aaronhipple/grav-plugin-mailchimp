@@ -1,4 +1,6 @@
 <?php declare(strict_types=1);
+// phpcs:ignoreFile PSR1.Files.SideEffects.FoundWithSymbols
+
 namespace Grav\Plugin;
 
 use RocketTheme\Toolbox\Event\Event;
@@ -161,12 +163,12 @@ class MailChimpPlugin extends Plugin
     {
         $detectedLanguages = [];
         switch ($this->grav['config']->get('plugins.mailchimp.language_detection_mode')) {
-        case 'browser':
-            $detectedLanguages = $this->grav['language']->getBrowserLanguages();
-            break;
-        case 'active':
-            $detectedLanguages = [$this->grav['language']->getActive()];
-            break;
+            case 'browser':
+                $detectedLanguages = $this->grav['language']->getBrowserLanguages();
+                break;
+            case 'active':
+                $detectedLanguages = [$this->grav['language']->getActive()];
+                break;
         }
         $intersectLanguages = array_intersect($detectedLanguages, array_keys(self::supportedLanguages()));
         if (!empty($intersectLanguages)) {
