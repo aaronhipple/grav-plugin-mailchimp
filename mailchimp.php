@@ -1,4 +1,6 @@
 <?php declare(strict_types=1);
+// phpcs:ignoreFile PSR1.Files.SideEffects.FoundWithSymbols
+
 namespace Grav\Plugin;
 
 use RocketTheme\Toolbox\Event\Event;
@@ -122,20 +124,26 @@ class MailChimpPlugin extends Plugin
     public function onFormProcessed(Event $event)
     {
         switch ($event['action']) {
-        case 'mailchimp':
-            (new FormEventHandler())
-                ->setMailChimp(
-                    new ErrorLoggingMailChimp(
-                        new MailChimp($this->grav['config']->get('plugins.mailchimp.api_key')),
-                        $this->grav['log']
-                    )
-                )
-                ->setDefaultListId($this->grav['config']->get('plugins.mailchimp.default_list_id'))
-                ->setDefaultStatus($this->grav['config']->get('plugins.mailchimp.default_status'))
-                ->setDeleteFirst($this->grav['config']->get('plugins.mailchimp.delete_first'))
-                ->setIp($this->grav['uri']->ip())
-                ->setLanguage($this->getLanguage())
-                ->onEvent($event);
+            case 'mailchimp':
+                $mailchimp = new ErrorLoggingMailChimp(
+                    new MailChimp($this->grav['config']->get('plugins.mailchimp.api_key')),
+                    $this->grav['log']
+                );
+
+                $handler = (new FormEventHandler())
+                    ->setMailChimp($mailchimp)
+                    ->setDefaultStatus($this->grav['config']->get('plugins.mailchimp.default_status'))
+                    ->setDeleteFirst($this->grav['config']->get('plugins.mailchimp.delete_first'))
+                    ->setIp($this->grav['uri']->ip())
+                    ->setLanguage($this->getLanguage());
+
+                $defaultListId = $this->grav['config']->get('plugins.mailchimp.default_list_id');
+
+                if (!is_null($defaultListId)) {
+                    $handler->setDefaultListIds([$defaultListId]);
+                }
+
+                $handler->onEvent($event);
         }
     }
 
@@ -155,12 +163,12 @@ class MailChimpPlugin extends Plugin
     {
         $detectedLanguages = [];
         switch ($this->grav['config']->get('plugins.mailchimp.language_detection_mode')) {
-        case 'browser':
-            $detectedLanguages = $this->grav['language']->getBrowserLanguages();
-            break;
-        case 'active':
-            $detectedLanguages = [$this->grav['language']->getActive()];
-            break;
+            case 'browser':
+                $detectedLanguages = $this->grav['language']->getBrowserLanguages();
+                break;
+            case 'active':
+                $detectedLanguages = [$this->grav['language']->getActive()];
+                break;
         }
         $intersectLanguages = array_intersect($detectedLanguages, array_keys(self::supportedLanguages()));
         if (!empty($intersectLanguages)) {

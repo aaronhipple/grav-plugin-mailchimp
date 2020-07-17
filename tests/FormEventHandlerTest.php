@@ -45,7 +45,7 @@ final class FormEventHandlerTest extends TestCase
         $this->handler
             ->setMailChimp($this->mailchimp->reveal())
             ->setLanguage('en')
-            ->setDefaultListId($this->listId)
+            ->setDefaultListIds([$this->listId])
             ->setDefaultStatus('pending')
             ->setIp('127.0.0.1');
     }
@@ -211,5 +211,49 @@ final class FormEventHandlerTest extends TestCase
             Argument::type('string'),
             Argument::type('array')
         )->shouldHaveBeenCalled();
+    }
+
+    public function testSupportsConfigurationsWithoutADefaultListID()
+    {
+        $handler = new FormEventHandler();
+        $handler
+            ->setMailChimp($this->mailchimp->reveal())
+            ->setLanguage('en')
+            ->setDefaultStatus('pending')
+            ->setIp('127.0.0.1');
+
+        $this->event->offsetGet('params')->willReturn(
+            [
+                'lists' => [
+                    'list_one',
+                ],
+            ]
+        );
+
+        $handler
+            ->onEvent($this->event->reveal());
+
+        $this->mailchimp->put(
+            "lists/list_one/members/{$this->subscriberId}",
+            Argument::any()
+        )->shouldHaveBeenCalled();
+    }
+
+    public function testRequiresEitherDefaultOrFormBasedListIds()
+    {
+        $handler = new FormEventHandler();
+        $handler
+            ->setMailChimp($this->mailchimp->reveal())
+            ->setLanguage('en')
+            ->setDefaultStatus('pending')
+            ->setIp('127.0.0.1');
+
+        $handler
+            ->onEvent($this->event->reveal());
+
+        $this->mailchimp->put(
+            Argument::type('string'),
+            Argument::type('array')
+        )->shouldNotHaveBeenCalled();
     }
 }
