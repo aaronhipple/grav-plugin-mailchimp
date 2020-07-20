@@ -1,15 +1,14 @@
 name: MailChimp
-version: 0.2.0
+version: 0.2.1
 description: Add MailChimp subscribe form action support
 icon: plug
 author:
   name: Aaron Hipple
-  email: ahipple@gmail.com
+  email: aaron@hippl.es
 homepage: https://github.com/aaronhipple/grav-plugin-mailchimp
-demo: http://demo.yoursite.com
 keywords: grav, plugin, mailchimp
 bugs: https://github.com/aaronhipple/grav-plugin-mailchimp/issues
-docs: https://github.com/aaronhipple/grav-plugin-mailchimp/blob/develop/README.md
+docs: https://github.com/aaronhipple/grav-plugin-mailchimp/blob/master/README.md
 license: MIT
 
 form:
