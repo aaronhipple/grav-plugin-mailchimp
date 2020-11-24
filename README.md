@@ -24,9 +24,13 @@ This plugin is available via Packagist.org.
 
 ```bash
 # install without dev dependencies in a production-type environment.
+cd user/plugins
+mkdir mailchimp
 composer require aaronhipple/grav-plugin-mailchimp --update-no-dev
 
 # install with dev dependencies in a development- or CI-type environment.
+cd user/plugins
+mkdir mailchimp
 composer require aaronhipple/grav-plugin-mailchimp
 ```
 

@@ -17,12 +17,6 @@
     "php": ">=7.1.0",
     "composer/installers": "~1.0"
   },
-  "extra": {
-    "installer-name": "mailchimp",
-    "installer-paths": {
-      "user/plugins/{$name}/": ["aaronhipple/grav-plugin-mailchimp"]
-    }
-  },
   "repositories": [
     {
       "type": "vcs",
