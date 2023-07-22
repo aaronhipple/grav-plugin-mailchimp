@@ -2,6 +2,8 @@
 
 The **MailChimp** Plugin is for [Grav CMS](http://github.com/getgrav/grav). It creates a form action step permitting the signing up of members to a MailChimp email list.
 
+_**NOTE**: This plugin is unmaintained. Use at your own risk, forks welcome!_
+
 ## Description
 
 Adds MailChimp subscribe form action support.
